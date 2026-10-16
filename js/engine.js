@@ -520,9 +520,55 @@ function useLeaderSkill() {
   syncSkillChip();
 }
 
-$("btn-begin").addEventListener("click", startSelect);
+const bgm = $("bgm");
+bgm.volume = 0.38;
+let musicWanted = false;
+
+function syncMusicButton() {
+  const on = musicWanted && !bgm.paused && !bgm.muted;
+  const btn = $("btn-music");
+  btn.textContent = on ? "Music on" : "Music off";
+  btn.setAttribute("aria-pressed", on ? "true" : "false");
+  btn.setAttribute("aria-label", on ? "Mute music" : "Play music");
+}
+
+function startBgm() {
+  if (!musicWanted || document.hidden) return;
+  const play = bgm.play();
+  if (play && play.catch) play.catch(() => {});
+  syncMusicButton();
+}
+
+function stopBgm() {
+  bgm.pause();
+  syncMusicButton();
+}
+
+$("btn-music").addEventListener("click", () => {
+  if (musicWanted) {
+    musicWanted = false;
+    stopBgm();
+  } else {
+    musicWanted = true;
+    bgm.muted = false;
+    startBgm();
+  }
+});
+
+$("btn-begin").addEventListener("click", () => {
+  musicWanted = true;
+  startBgm();
+  startSelect();
+});
 $("skill-chip").addEventListener("click", useLeaderSkill);
 setScene("title");
+syncMusicButton();
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) stopBgm();
+  else if (musicWanted) startBgm();
+});
+window.addEventListener("pagehide", stopBgm);
 
 const boot = new URLSearchParams(location.search);
 if (boot.get("screen") === "select") {

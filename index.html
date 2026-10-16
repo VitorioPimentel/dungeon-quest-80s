@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/game.css?v=ddlike" />
+    <link rel="stylesheet" href="css/game.css?v=bgm4" />
   </head>
   <body>
     <div id="app">
@@ -85,6 +85,15 @@
       </section>
     </div>
 
+    <audio id="bgm" src="assets/music/orchestral-adventure.mp3" loop preload="auto"></audio>
+    <div class="music-dock">
+      <button type="button" class="music-toggle" id="btn-music" aria-pressed="false" aria-label="Play music">
+        Music off
+      </button>
+      <p class="music-credit">
+        Music: “Orchestral Adventure” by CodeManu (CC-BY 3.0)
+      </p>
+    </div>
     <script src="js/content.js"></script>
     <script src="js/engine.js"></script>
   </body>

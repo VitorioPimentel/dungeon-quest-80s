@@ -90,190 +90,93 @@ body {
     radial-gradient(ellipse at 50% 55%, transparent 42%, rgba(8, 4, 10, 0.4) 100%);
 }
 
+.scene-meadow .sky,
+.scene-woods .sky,
+.scene-cavern .sky,
+.scene-citadel .sky,
+.scene-ending .sky {
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 .scene-meadow .sky {
-  background:
-    radial-gradient(ellipse at 82% 0%, #fff8d0 0 10%, transparent 34%),
-    linear-gradient(180deg, #5eb8ff 0%, #bfe7ff 28%, #d7f0a8 58%, #5a9a4a 100%);
-}
-
-.scene-meadow .sun {
-  background: radial-gradient(circle at 82% 10%, #fffce8 0 3%, #ffe07a 7%, transparent 16%);
-}
-
-.scene-meadow .far-ridges {
-  background:
-    linear-gradient(180deg, transparent 48%, #6aa87a00 48%),
-    radial-gradient(ellipse at 20% 72%, #4e7a58 0 180px, transparent 181px),
-    radial-gradient(ellipse at 70% 74%, #3e6a4c 0 220px, transparent 221px);
-}
-
-.scene-meadow .terrain {
-  background: linear-gradient(180deg, transparent 64%, #2f6b3c 64%, #1a3a24 100%);
-}
-
-.scene-meadow .scene-fx::before {
-  content: "";
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 42%;
-  background:
-    radial-gradient(circle at 12% 70%, #7bc45a 0 18px, transparent 19px),
-    radial-gradient(circle at 28% 80%, #4a8a40 0 22px, transparent 23px),
-    radial-gradient(circle at 55% 75%, #8ad46a 0 16px, transparent 17px),
-    radial-gradient(circle at 78% 82%, #3e7a38 0 26px, transparent 27px);
-  opacity: 0.7;
+  background-color: #c9a46a;
+  background-image: url("../assets/scenes/meadow.jpg");
+  background-position: 50% 40%;
 }
 
 .scene-woods .sky {
-  background:
-    radial-gradient(ellipse at 50% 0%, #f4d58a44 0 18%, transparent 46%),
-    linear-gradient(180deg, #1a2834 0%, #1c3a30 42%, #0c2018 100%);
-}
-
-.scene-woods .haze {
-  background: linear-gradient(90deg, rgba(6, 16, 12, 0.78), transparent 28% 72%, rgba(6, 16, 12, 0.78));
-}
-
-.scene-woods .terrain {
-  background: linear-gradient(180deg, transparent 58%, #08140f 58%);
-}
-
-.scene-woods .scene-fx {
-  background:
-    repeating-linear-gradient(92deg, transparent 0 64px, rgba(6, 18, 12, 0.82) 64px 108px),
-    repeating-linear-gradient(88deg, transparent 0 90px, rgba(10, 28, 18, 0.55) 90px 130px);
-}
-
-.scene-woods .scene-fx::before,
-.scene-woods .scene-fx::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  width: 22%;
-  height: 100%;
-  background: linear-gradient(90deg, #050e0b, transparent);
-}
-
-.scene-woods .scene-fx::after {
-  right: 0;
-  left: auto;
-  transform: scaleX(-1);
+  background-color: #0c1420;
+  background-image: url("../assets/scenes/citadel.jpg");
+  background-position: 18% 52%;
 }
 
 .scene-cavern .sky {
-  background:
-    radial-gradient(circle at 50% 28%, #4af0d833 0 10%, transparent 36%),
-    radial-gradient(circle at 18% 70%, #7a4dff55 0 8%, transparent 28%),
-    linear-gradient(180deg, #070e1c 0%, #12243a 42%, #08141e 100%);
-}
-
-.scene-cavern .terrain {
-  background:
-    radial-gradient(ellipse at 50% 120%, #061018 38%, transparent 39%),
-    linear-gradient(180deg, transparent 62%, #050c14 100%);
-}
-
-.scene-cavern .scene-fx {
-  background:
-    radial-gradient(circle at 16% 72%, #5cf0d8 0 5px, transparent 16px),
-    radial-gradient(circle at 74% 62%, #c9a5ff 0 7px, transparent 20px),
-    radial-gradient(circle at 48% 36%, #7ef0ff66 0 36px, transparent 88px);
-  animation: shimmer 6s ease-in-out infinite;
-}
-
-.scene-cavern .scene-fx::before,
-.scene-cavern .scene-fx::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  width: 28%;
-  height: 70%;
-  background: linear-gradient(180deg, #0a1824, #05080e);
-  clip-path: polygon(40% 0, 100% 18%, 100% 100%, 0 100%, 0 22%);
-  opacity: 0.9;
-}
-
-.scene-cavern .scene-fx::after {
-  right: 0;
-  left: auto;
-  transform: scaleX(-1);
+  background-color: #1a120c;
+  background-image: url("../assets/scenes/cavern.jpg");
+  background-position: center 18%;
+  background-size: auto 100%;
 }
 
 .scene-citadel .sky {
-  background:
-    radial-gradient(ellipse at 72% 16%, #6b2ad8 0 7%, transparent 32%),
-    linear-gradient(180deg, #100616 0%, #3a1038 34%, #160814 68%, #060308 100%);
-}
-
-.scene-citadel .haze {
-  background: radial-gradient(ellipse at 50% 78%, #ff3a3a40, transparent 52%);
-}
-
-.scene-citadel .terrain {
-  background: linear-gradient(180deg, transparent 58%, #09060e 58%);
-}
-
-.scene-citadel .scene-fx::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: 16%;
-  width: 300px;
-  height: 460px;
-  transform: translateX(-50%);
-  background: linear-gradient(180deg, #3a1848 0%, #120816 100%);
-  clip-path: polygon(50% 0, 78% 20%, 94% 100%, 6% 100%, 22% 20%);
-  box-shadow: 0 0 90px #7a2aff88, 0 0 40px #ff3a3a44;
-}
-
-.scene-citadel .scene-fx::after {
-  content: "";
-  position: absolute;
-  left: 18%;
-  top: 10%;
-  width: 220px;
-  height: 90px;
-  background:
-    radial-gradient(circle at 20% 50%, #e25b5b 0 10px, transparent 12px),
-    radial-gradient(circle at 40% 40%, #f0d45a 0 10px, transparent 12px),
-    radial-gradient(circle at 55% 55%, #5ad46a 0 10px, transparent 12px),
-    radial-gradient(circle at 70% 42%, #5aa0f0 0 10px, transparent 12px),
-    radial-gradient(circle at 86% 50%, #c9a5ff 0 10px, transparent 12px);
-  opacity: 0.55;
-  filter: blur(1px);
-  animation: pulse 5s ease-in-out infinite;
+  background-color: #060418;
+  background-image: url("../assets/scenes/citadel.jpg");
+  background-position: 70% 28%;
 }
 
 .scene-ending .sky {
+  background-color: #c9a46a;
+  background-image: url("../assets/scenes/ending.jpg");
+  background-position: center 42%;
+  background-size: auto 100%;
+}
+
+.scene-meadow .sun,
+.scene-meadow .clouds,
+.scene-meadow .far-ridges,
+.scene-meadow .haze,
+.scene-meadow .terrain,
+.scene-meadow .scene-fx,
+.scene-woods .sun,
+.scene-woods .clouds,
+.scene-woods .far-ridges,
+.scene-woods .haze,
+.scene-woods .terrain,
+.scene-woods .scene-fx,
+.scene-cavern .sun,
+.scene-cavern .clouds,
+.scene-cavern .far-ridges,
+.scene-cavern .haze,
+.scene-cavern .terrain,
+.scene-cavern .scene-fx,
+.scene-citadel .sun,
+.scene-citadel .clouds,
+.scene-citadel .far-ridges,
+.scene-citadel .haze,
+.scene-citadel .terrain,
+.scene-citadel .scene-fx,
+.scene-ending .sun,
+.scene-ending .clouds,
+.scene-ending .far-ridges,
+.scene-ending .haze,
+.scene-ending .terrain,
+.scene-ending .scene-fx {
+  display: none;
+}
+
+.scene-meadow .vignette {
   background:
-    radial-gradient(circle at 50% 38%, #ffe7a8 0 7%, transparent 26%),
-    linear-gradient(180deg, #1a2448 0%, #3a2a68 50%, #120c28 100%);
+    linear-gradient(180deg, rgba(8, 4, 12, 0.28) 0%, transparent 22%),
+    linear-gradient(0deg, rgba(8, 4, 12, 0.32) 0%, transparent 28%);
 }
 
-.scene-ending .sun {
-  background: radial-gradient(circle at 50% 36%, #fff6cc 0 4%, #e8c36a88 10%, transparent 22%);
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 0.65;
-  }
-  50% {
-    transform: scale(1.08);
-    opacity: 1;
-  }
-}
-
-@keyframes shimmer {
-  0%,
-  100% {
-    opacity: 0.7;
-  }
-  50% {
-    opacity: 1;
-  }
+.scene-woods .vignette,
+.scene-cavern .vignette,
+.scene-citadel .vignette,
+.scene-ending .vignette {
+  background:
+    linear-gradient(180deg, rgba(8, 4, 12, 0.4) 0%, transparent 18%),
+    linear-gradient(0deg, rgba(8, 4, 12, 0.58) 0%, rgba(8, 4, 12, 0.18) 22%, transparent 40%);
 }
 
 .hud {
@@ -353,6 +256,45 @@ body {
   cursor: default;
 }
 
+.music-dock {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 8;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.music-toggle {
+  appearance: none;
+  border: 1px solid var(--gold);
+  background: rgba(12, 8, 10, 0.78);
+  color: var(--gold);
+  font-family: Cinzel, serif;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.music-toggle[aria-pressed="false"] {
+  opacity: 0.55;
+}
+
+.music-credit {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.35;
+  text-align: right;
+  color: #d8c9a8;
+  text-shadow: 0 2px 8px #000;
+  white-space: nowrap;
+}
+
 .hp-track {
   height: 10px;
   border-radius: 99px;
@@ -391,6 +333,16 @@ body {
   text-align: center;
   max-width: 780px;
   text-shadow: 0 6px 24px #000, 0 2px 8px #000;
+}
+
+.select-copy {
+  margin-inline: auto;
+}
+
+.select-copy p:not(.kicker) {
+  font-size: 22px;
+  line-height: 1.45;
+  margin: 0 auto 4px;
 }
 
 .title-screen {
@@ -650,6 +602,25 @@ h2 {
 .status {
   color: #f0d48a;
   font-style: italic;
+}
+
+@media (min-width: 861px) {
+  .hud {
+    grid-template-columns: minmax(220px, 1fr) auto minmax(200px, 280px);
+  }
+
+  .hud-kicker,
+  .hud-vitals span {
+    font-size: 14px;
+  }
+
+  .hud-phase strong {
+    font-size: 22px;
+  }
+
+  .skill-chip {
+    font-size: 13px;
+  }
 }
 
 @media (max-width: 860px) {
