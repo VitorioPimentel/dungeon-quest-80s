@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dungeon Quest — Realm of the Dungeon Master</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/game.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div id="scene" class="scene scene-title" aria-hidden="true">
+        <div class="sky"></div>
+        <div class="sun"></div>
+        <div class="clouds"></div>
+        <div class="far-ridges"></div>
+        <div class="haze"></div>
+        <div class="terrain"></div>
+        <div class="scene-fx" id="scene-fx"></div>
+        <div class="vignette"></div>
+      </div>
+      <div class="grain" aria-hidden="true"></div>
+
+      <header class="hud" id="hud" hidden>
+        <div class="hud-phase">
+          <span class="hud-kicker">Chapter</span>
+          <strong id="phase-label">I — The Calling</strong>
+          <button type="button" class="skill-chip" id="skill-chip" hidden></button>
+        </div>
+        <div class="party-strip" id="party-strip"></div>
+        <div class="hud-vitals">
+          <span>Party Heart</span>
+          <div class="hp-track" aria-label="Party health">
+            <div class="hp-fill" id="hp-fill"></div>
+          </div>
+        </div>
+      </header>
+
+      <main class="stage">
+        <section class="title-screen" id="title-screen">
+          <p class="kicker">A painted quest after the 1980s animated legend</p>
+          <h1>Dungeon Quest</h1>
+          <p class="subtitle">Realm of the Dungeon Master</p>
+          <p class="lede">
+            Six friends boarded a carnival ride and fell through a map.
+            Choose a leader. The Circle of Six still walks as one — and the
+            Realm will not open the way home until they earn it.
+          </p>
+          <button type="button" class="btn gold" id="btn-begin">Begin the Quest</button>
+        </section>
+
+        <section class="select-screen" id="select-screen" hidden>
+          <div class="select-copy">
+            <p class="kicker">Choose your leader</p>
+            <h2>The Circle of Six</h2>
+            <p>
+              The others join the moment you step forward. Your leader’s gift
+              will glow when stones, locks, and shadows refuse to yield.
+            </p>
+          </div>
+          <div class="character-grid" id="character-grid"></div>
+        </section>
+
+        <aside class="portrait-stage" id="portrait-stage" hidden>
+          <div class="portrait-glow"></div>
+          <div id="speaker-art"></div>
+        </aside>
+      </main>
+
+      <section class="dialogue" id="dialogue" hidden>
+        <div class="dialogue-inner">
+          <div class="speaker-row">
+            <span class="speaker-name" id="speaker-name"></span>
+            <span class="speaker-role" id="speaker-role"></span>
+          </div>
+          <p class="dialogue-text" id="dialogue-text"></p>
+          <div class="choices" id="choices"></div>
+          <div class="puzzle-mount" id="puzzle-mount"></div>
+        </div>
+      </section>
+    </div>
+
+    <script src="js/content.js"></script>
+    <script src="js/engine.js"></script>
+  </body>
+</html>

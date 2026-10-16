@@ -1,0 +1,665 @@
+:root {
+  --ink: #16100c;
+  --parchment: #f6e6c8;
+  --gold: #f0c86a;
+  --gold-deep: #b8892e;
+  --ember: #d4653a;
+  --night: #120c1c;
+  --hp: #c94b4b;
+  --shadow: rgba(8, 4, 12, 0.55);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--night);
+  color: var(--parchment);
+  font-family: "IM Fell English", Georgia, serif;
+}
+
+#app {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.scene {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.sky,
+.sun,
+.clouds,
+.far-ridges,
+.haze,
+.terrain,
+.scene-fx,
+.vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.vignette {
+  background: radial-gradient(ellipse at center, transparent 42%, rgba(8, 4, 10, 0.55) 100%);
+}
+
+.grain {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0.09;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+}
+
+.scene-title .sky {
+  background:
+    radial-gradient(ellipse at 78% 12%, #ffe7a8 0%, transparent 22%),
+    radial-gradient(ellipse at 18% 8%, #ff8a5b 0%, transparent 28%),
+    linear-gradient(180deg, #2a1438 0%, #c45c3a 36%, #f0b15a 58%, #6b3a28 100%);
+}
+
+.scene-title .sun {
+  background: radial-gradient(circle at 76% 16%, #fff4c4 0 4%, #ffb14a 8%, transparent 18%);
+}
+
+.scene-title .clouds {
+  background:
+    radial-gradient(ellipse at 20% 28%, #ffd2a888 0 80px, transparent 81px),
+    radial-gradient(ellipse at 38% 24%, #ffe8c466 0 110px, transparent 111px),
+    radial-gradient(ellipse at 86% 30%, #ffc09055 0 90px, transparent 91px);
+}
+
+.scene-title .terrain {
+  background:
+    linear-gradient(180deg, transparent 56%, #3a1810 56%, #14080c 100%);
+}
+
+.scene-title .scene-fx::before {
+  content: "";
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  left: 10%;
+  bottom: 16%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffe7a0, #ff7a3a 42%, transparent 70%);
+  opacity: 0.75;
+  animation: pulse 4s ease-in-out infinite;
+}
+
+.scene-title .scene-fx::after {
+  content: "";
+  position: absolute;
+  width: min(520px, 70vw);
+  height: 90px;
+  right: 6%;
+  bottom: 20%;
+  background: linear-gradient(90deg, transparent, #ffd89aaa, transparent);
+  border-radius: 50%;
+  transform: rotate(-8deg);
+  filter: blur(1px);
+}
+
+.scene-meadow .sky {
+  background:
+    radial-gradient(ellipse at 82% 0%, #fff8d0 0 10%, transparent 34%),
+    linear-gradient(180deg, #5eb8ff 0%, #bfe7ff 28%, #d7f0a8 58%, #5a9a4a 100%);
+}
+
+.scene-meadow .sun {
+  background: radial-gradient(circle at 82% 10%, #fffce8 0 3%, #ffe07a 7%, transparent 16%);
+}
+
+.scene-meadow .far-ridges {
+  background:
+    linear-gradient(180deg, transparent 48%, #6aa87a00 48%),
+    radial-gradient(ellipse at 20% 72%, #4e7a58 0 180px, transparent 181px),
+    radial-gradient(ellipse at 70% 74%, #3e6a4c 0 220px, transparent 221px);
+}
+
+.scene-meadow .terrain {
+  background: linear-gradient(180deg, transparent 64%, #2f6b3c 64%, #1a3a24 100%);
+}
+
+.scene-meadow .scene-fx::before {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 42%;
+  background:
+    radial-gradient(circle at 12% 70%, #7bc45a 0 18px, transparent 19px),
+    radial-gradient(circle at 28% 80%, #4a8a40 0 22px, transparent 23px),
+    radial-gradient(circle at 55% 75%, #8ad46a 0 16px, transparent 17px),
+    radial-gradient(circle at 78% 82%, #3e7a38 0 26px, transparent 27px);
+  opacity: 0.7;
+}
+
+.scene-woods .sky {
+  background:
+    radial-gradient(ellipse at 50% 0%, #f4d58a44 0 18%, transparent 46%),
+    linear-gradient(180deg, #1a2834 0%, #1c3a30 42%, #0c2018 100%);
+}
+
+.scene-woods .haze {
+  background: linear-gradient(90deg, rgba(6, 16, 12, 0.78), transparent 28% 72%, rgba(6, 16, 12, 0.78));
+}
+
+.scene-woods .terrain {
+  background: linear-gradient(180deg, transparent 58%, #08140f 58%);
+}
+
+.scene-woods .scene-fx {
+  background:
+    repeating-linear-gradient(92deg, transparent 0 64px, rgba(6, 18, 12, 0.82) 64px 108px),
+    repeating-linear-gradient(88deg, transparent 0 90px, rgba(10, 28, 18, 0.55) 90px 130px);
+}
+
+.scene-woods .scene-fx::before,
+.scene-woods .scene-fx::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 22%;
+  height: 100%;
+  background: linear-gradient(90deg, #050e0b, transparent);
+}
+
+.scene-woods .scene-fx::after {
+  right: 0;
+  left: auto;
+  transform: scaleX(-1);
+}
+
+.scene-cavern .sky {
+  background:
+    radial-gradient(circle at 50% 28%, #4af0d833 0 10%, transparent 36%),
+    radial-gradient(circle at 18% 70%, #7a4dff55 0 8%, transparent 28%),
+    linear-gradient(180deg, #070e1c 0%, #12243a 42%, #08141e 100%);
+}
+
+.scene-cavern .terrain {
+  background:
+    radial-gradient(ellipse at 50% 120%, #061018 38%, transparent 39%),
+    linear-gradient(180deg, transparent 62%, #050c14 100%);
+}
+
+.scene-cavern .scene-fx {
+  background:
+    radial-gradient(circle at 16% 72%, #5cf0d8 0 5px, transparent 16px),
+    radial-gradient(circle at 74% 62%, #c9a5ff 0 7px, transparent 20px),
+    radial-gradient(circle at 48% 36%, #7ef0ff66 0 36px, transparent 88px);
+  animation: shimmer 6s ease-in-out infinite;
+}
+
+.scene-cavern .scene-fx::before,
+.scene-cavern .scene-fx::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 28%;
+  height: 70%;
+  background: linear-gradient(180deg, #0a1824, #05080e);
+  clip-path: polygon(40% 0, 100% 18%, 100% 100%, 0 100%, 0 22%);
+  opacity: 0.9;
+}
+
+.scene-cavern .scene-fx::after {
+  right: 0;
+  left: auto;
+  transform: scaleX(-1);
+}
+
+.scene-citadel .sky {
+  background:
+    radial-gradient(ellipse at 72% 16%, #6b2ad8 0 7%, transparent 32%),
+    linear-gradient(180deg, #100616 0%, #3a1038 34%, #160814 68%, #060308 100%);
+}
+
+.scene-citadel .haze {
+  background: radial-gradient(ellipse at 50% 78%, #ff3a3a40, transparent 52%);
+}
+
+.scene-citadel .terrain {
+  background: linear-gradient(180deg, transparent 58%, #09060e 58%);
+}
+
+.scene-citadel .scene-fx::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 16%;
+  width: 300px;
+  height: 460px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, #3a1848 0%, #120816 100%);
+  clip-path: polygon(50% 0, 78% 20%, 94% 100%, 6% 100%, 22% 20%);
+  box-shadow: 0 0 90px #7a2aff88, 0 0 40px #ff3a3a44;
+}
+
+.scene-citadel .scene-fx::after {
+  content: "";
+  position: absolute;
+  left: 18%;
+  top: 10%;
+  width: 220px;
+  height: 90px;
+  background:
+    radial-gradient(circle at 20% 50%, #e25b5b 0 10px, transparent 12px),
+    radial-gradient(circle at 40% 40%, #f0d45a 0 10px, transparent 12px),
+    radial-gradient(circle at 55% 55%, #5ad46a 0 10px, transparent 12px),
+    radial-gradient(circle at 70% 42%, #5aa0f0 0 10px, transparent 12px),
+    radial-gradient(circle at 86% 50%, #c9a5ff 0 10px, transparent 12px);
+  opacity: 0.55;
+  filter: blur(1px);
+  animation: pulse 5s ease-in-out infinite;
+}
+
+.scene-ending .sky {
+  background:
+    radial-gradient(circle at 50% 38%, #ffe7a8 0 7%, transparent 26%),
+    linear-gradient(180deg, #1a2448 0%, #3a2a68 50%, #120c28 100%);
+}
+
+.scene-ending .sun {
+  background: radial-gradient(circle at 50% 36%, #fff6cc 0 4%, #e8c36a88 10%, transparent 22%);
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.65;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.hud {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) auto minmax(160px, 220px);
+  gap: 16px;
+  align-items: center;
+  padding: 16px 28px;
+  background: linear-gradient(180deg, rgba(8, 4, 12, 0.78), transparent);
+}
+
+.hud-kicker,
+.hud-vitals span {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-family: Cinzel, serif;
+}
+
+.hud-phase strong {
+  font-family: Cinzel, serif;
+  font-size: 15px;
+}
+
+.party-strip {
+  display: flex;
+  gap: 8px;
+}
+
+.mini-hero {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  overflow: hidden;
+  background: #222;
+}
+
+.mini-hero.leader {
+  box-shadow: 0 0 0 3px #fff3, 0 0 16px var(--gold);
+}
+
+.mini-hero svg {
+  width: 100%;
+  height: 100%;
+}
+
+.hud-vitals {
+  justify-self: end;
+  width: 100%;
+}
+
+.skill-chip {
+  appearance: none;
+  display: inline-block;
+  margin-top: 8px;
+  border: 1px solid var(--gold);
+  background: rgba(20, 12, 8, 0.65);
+  color: var(--gold);
+  font-family: Cinzel, serif;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.skill-chip:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.hp-track {
+  height: 10px;
+  border-radius: 99px;
+  background: #3a2020;
+  overflow: hidden;
+  border: 1px solid #6a3030;
+}
+
+.hp-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #7a1c1c, #e25b5b);
+  transition: width 0.4s ease;
+}
+
+.stage {
+  position: relative;
+  z-index: 2;
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px 8px;
+}
+
+.title-screen,
+.select-copy {
+  text-align: center;
+  max-width: 780px;
+  text-shadow: 0 6px 24px #000;
+}
+
+.kicker {
+  font-family: Cinzel, serif;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-size: 12px;
+}
+
+h1 {
+  font-family: "Cinzel Decorative", Cinzel, serif;
+  font-size: clamp(40px, 8vw, 84px);
+  margin: 0;
+  color: #fff6d8;
+}
+
+h2 {
+  font-family: Cinzel, serif;
+  margin: 6px 0 10px;
+}
+
+.subtitle {
+  margin: 0 0 16px;
+  font-size: 22px;
+  color: var(--gold);
+  font-family: Cinzel, serif;
+}
+
+.lede {
+  font-size: 20px;
+  line-height: 1.45;
+}
+
+.btn {
+  appearance: none;
+  border: 1px solid var(--gold-deep);
+  background: linear-gradient(180deg, #f0d48a, #b07a28);
+  color: #2a1808;
+  font-family: Cinzel, serif;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 12px 28px;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.btn:hover,
+.choice:hover,
+.hero-card:hover {
+  filter: brightness(1.06);
+}
+
+.select-screen {
+  width: min(1100px, 100%);
+}
+
+.character-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.hero-card {
+  background: linear-gradient(180deg, rgba(20, 14, 10, 0.72), rgba(8, 6, 10, 0.88));
+  border: 1px solid #c9a45a66;
+  border-radius: 18px;
+  padding: 14px;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  gap: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hero-card:hover,
+.hero-card:focus {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  outline: none;
+  border-color: var(--gold);
+}
+
+.hero-card h3 {
+  margin: 0 0 4px;
+  font-family: Cinzel, serif;
+  font-size: 18px;
+}
+
+.hero-card .class-name {
+  color: var(--gold);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero-card p {
+  margin: 8px 0 0;
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.art-frame {
+  width: 84px;
+  height: 84px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #e8c36a88;
+}
+
+.art-frame svg,
+#speaker-art svg,
+.mini-hero svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.portrait-stage {
+  position: absolute;
+  right: 28px;
+  top: 22%;
+  width: 132px;
+  height: 132px;
+  z-index: 2;
+}
+
+.portrait-glow {
+  position: absolute;
+  inset: -20px;
+  background: radial-gradient(circle, #ffe7a844, transparent 70%);
+}
+
+.dialogue {
+  position: relative;
+  z-index: 4;
+  padding: 0 24px 24px;
+}
+
+.dialogue-inner {
+  max-width: 980px;
+  margin: 0 auto;
+  background:
+    linear-gradient(180deg, rgba(48, 28, 14, 0.2), transparent 18%),
+    linear-gradient(180deg, #3a2614ee, #24180eee);
+  border: 2px solid #e0c07a;
+  border-radius: 18px;
+  padding: 18px 22px 16px;
+  box-shadow: 0 20px 50px var(--shadow);
+}
+
+.speaker-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: Cinzel, serif;
+  color: var(--gold);
+}
+
+.dialogue-text {
+  font-size: 21px;
+  line-height: 1.45;
+  margin: 10px 0 14px;
+  min-height: 3.2em;
+  white-space: pre-wrap;
+}
+
+.choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.choice {
+  background: rgba(12, 8, 6, 0.45);
+  color: var(--parchment);
+  border: 1px solid #c9a45a99;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.puzzle-mount {
+  margin-top: 8px;
+}
+
+.rune-row,
+.crystal-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.rune,
+.crystal {
+  min-width: 92px;
+  min-height: 72px;
+  border-radius: 12px;
+  border: 1px solid #9ad7c8;
+  background: rgba(20, 40, 40, 0.6);
+  color: #e8fff8;
+  font-family: Cinzel, serif;
+  cursor: pointer;
+}
+
+.rune.lit,
+.crystal.on {
+  box-shadow: 0 0 18px #7ef0d8;
+  background: #245e58;
+}
+
+.crystal.c0 {
+  border-color: #e25b5b;
+}
+.crystal.c1 {
+  border-color: #f0d45a;
+}
+.crystal.c2 {
+  border-color: #5ad46a;
+}
+.crystal.c3 {
+  border-color: #7ec8e3;
+}
+
+.status {
+  color: #f0d48a;
+  font-style: italic;
+}
+
+@media (max-width: 860px) {
+  .character-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hud {
+    grid-template-columns: 1fr;
+  }
+
+  .hud-vitals {
+    justify-self: stretch;
+    width: auto;
+  }
+
+  .portrait-stage {
+    display: none;
+  }
+
+  h1 {
+    font-size: 42px;
+  }
+}
