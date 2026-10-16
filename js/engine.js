@@ -40,7 +40,7 @@ function hurt(n = 1) {
 function renderParty() {
   $("party-strip").innerHTML = HEROES.map((h) => {
     const cls = h.id === state.leaderId ? "mini-hero leader" : "mini-hero";
-    return `<div class="${cls}" title="${h.name} the ${h.cls}">${portraitSvg(h, 46)}</div>`;
+    return `<div class="${cls}" title="${h.name} the ${h.cls}">${portraitSvg(h)}</div>`;
   }).join("");
 }
 
@@ -71,7 +71,7 @@ function showDialogue({ speaker, role, text, choices = [], puzzle = null, scene,
   $("dialogue-text").textContent = text;
 
   const hero = HEROES.find((h) => h.name === speaker);
-  if (hero) $("speaker-art").innerHTML = portraitSvg(hero, 180);
+  if (hero) $("speaker-art").innerHTML = portraitSvg(hero);
   else if (speaker === "Venger") $("speaker-art").innerHTML = vengerPortrait();
   else $("speaker-art").innerHTML = dmPortrait();
 
@@ -523,3 +523,13 @@ function useLeaderSkill() {
 $("btn-begin").addEventListener("click", startSelect);
 $("skill-chip").addEventListener("click", useLeaderSkill);
 setScene("title");
+
+const boot = new URLSearchParams(location.search);
+if (boot.get("screen") === "select") {
+  startSelect();
+} else if (boot.get("screen") === "play") {
+  state.leaderId = boot.get("leader") || "hank";
+  renderParty();
+  setHp();
+  intro();
+}
