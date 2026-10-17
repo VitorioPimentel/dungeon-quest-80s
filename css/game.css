@@ -38,6 +38,7 @@ body {
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  overflow: hidden;
 }
 
 .sky,
@@ -88,6 +89,15 @@ body {
   background:
     linear-gradient(180deg, rgba(8, 4, 12, 0.7) 0%, rgba(8, 4, 12, 0.15) 28%, transparent 45%),
     radial-gradient(ellipse at 50% 55%, transparent 42%, rgba(8, 4, 10, 0.4) 100%);
+}
+
+.scene-meadow .sky,
+.scene-woods .sky,
+.scene-cavern .sky,
+.scene-citadel .sky,
+.scene-ending .sky,
+.scene-title .sky {
+  animation: ken-burns 22s ease-in-out infinite alternate;
 }
 
 .scene-meadow .sky,
@@ -364,6 +374,7 @@ h1 {
   font-size: clamp(40px, 8vw, 84px);
   margin: 0;
   color: #fff6d8;
+  animation: title-glow 3.2s ease-in-out infinite;
 }
 
 h2 {
@@ -503,6 +514,15 @@ h2 {
   position: absolute;
   inset: -20px;
   background: radial-gradient(circle, #ffe7a844, transparent 70%);
+  animation: glow-breathe 2.8s ease-in-out infinite;
+}
+
+.portrait-stage.is-venger .portrait-glow {
+  background: radial-gradient(circle, #ff3a3a66, transparent 70%);
+}
+
+.portrait-pop {
+  animation: portrait-pop 0.45s ease;
 }
 
 .dialogue {
@@ -516,7 +536,7 @@ h2 {
   margin: 0 auto;
   background:
     linear-gradient(180deg, rgba(48, 28, 14, 0.2), transparent 18%),
-    linear-gradient(180deg, #3a2614ee, #24180eee);
+    linear-gradient(180deg, #3a2614f5, #1a120af8);
   border: 2px solid #e0c07a;
   border-radius: 18px;
   padding: 18px 22px 16px;
@@ -602,6 +622,273 @@ h2 {
 .status {
   color: #f0d48a;
   font-style: italic;
+}
+
+.fx-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.fx-burst {
+  position: absolute;
+  inset: 0;
+}
+
+.fx-magic {
+  background: radial-gradient(circle at 50% 40%, #ffe7a888 0 8%, transparent 42%);
+  animation: fx-fade 0.8s ease-out forwards;
+}
+
+.fx-arrow {
+  background: linear-gradient(105deg, transparent 38%, #ffe36aee 50%, transparent 62%);
+  animation: fx-bolt 0.55s ease-out forwards;
+}
+
+.fx-shield {
+  background: radial-gradient(circle at 50% 70%, #7ec8e388 0 12%, transparent 48%);
+  animation: fx-fade 0.7s ease-out forwards;
+}
+
+.fx-hurt {
+  background: rgba(180, 20, 40, 0.22);
+  animation: fx-fade 0.4s ease-out forwards;
+}
+
+.fx-venger {
+  background: radial-gradient(circle at 78% 30%, #7a2aff99 0 10%, #ff3a3a44 28%, transparent 55%);
+  animation: fx-fade 0.7s ease-out forwards;
+}
+
+.fx-crystal {
+  background: radial-gradient(circle at 50% 80%, #7ef0d866 0 6%, transparent 40%);
+  animation: fx-fade 0.45s ease-out forwards;
+}
+
+.fx-step {
+  background: radial-gradient(circle at 50% 85%, #c9f0a844 0 8%, transparent 36%);
+  animation: fx-fade 0.35s ease-out forwards;
+}
+
+.scene-enter .sky {
+  filter: brightness(1.35) saturate(1.2);
+}
+
+.panel-in {
+  animation: panel-in 0.35s ease-out;
+}
+
+.hp-hurt {
+  filter: brightness(1.5);
+}
+
+.screen-shake {
+  animation: shake 0.35s ease-out;
+}
+
+.gift-row,
+.hat-row,
+.sigil-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.gift-card,
+.hat-item,
+.sigil {
+  appearance: none;
+  min-width: 120px;
+  min-height: 64px;
+  border-radius: 12px;
+  border: 1px solid #e0c07a99;
+  background: rgba(20, 12, 8, 0.65);
+  color: var(--parchment);
+  font-family: Cinzel, serif;
+  cursor: pointer;
+  padding: 8px 10px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.gift-who {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.gift-card:hover,
+.hat-item:hover,
+.sigil:hover,
+.path-cell:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 16px #ffe7a844;
+}
+
+.gift-card.correct,
+.hat-item.correct {
+  box-shadow: 0 0 22px #7ef0d8;
+  border-color: #7ef0d8;
+}
+
+.gift-card.wrong,
+.hat-item.wrong {
+  animation: shake 0.35s ease-out;
+  border-color: #e25b5b;
+}
+
+.hat-item.hint,
+.path-cell.hint,
+.sigil.hint {
+  box-shadow: 0 0 18px #f0d45a;
+}
+
+.path-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  max-width: 360px;
+  margin-top: 8px;
+}
+
+.path-cell {
+  appearance: none;
+  min-height: 48px;
+  border-radius: 10px;
+  border: 1px solid #8ad46a99;
+  background: #1c3a24;
+  color: var(--parchment);
+  font-family: Cinzel, serif;
+  cursor: pointer;
+}
+
+.path-cell.orc {
+  background: rgba(60, 16, 16, 0.8);
+  border-color: #e25b5b;
+}
+
+.path-cell.uni {
+  background: rgba(80, 40, 90, 0.75);
+  border-color: #e8c36a;
+  animation: glow-breathe 1.6s ease-in-out infinite;
+}
+
+.path-cell.here {
+  box-shadow: 0 0 0 3px #fff6, 0 0 16px #f0d45a;
+}
+
+.path-cell.trail {
+  opacity: 0.85;
+  background: rgba(40, 70, 40, 0.8);
+}
+
+.crystal.sing {
+  transform: scale(1.08);
+}
+
+.sigil.on,
+.crystal.on {
+  animation: crystal-flash 0.4s ease-out;
+}
+
+@keyframes ken-burns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes title-glow {
+  0%,
+  100% {
+    text-shadow: 0 0 12px #f0c86a44, 0 6px 24px #000;
+  }
+  50% {
+    text-shadow: 0 0 28px #ffe7a888, 0 6px 24px #000;
+  }
+}
+
+@keyframes glow-breathe {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes portrait-pop {
+  from {
+    transform: scale(0.86) translateY(8px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes panel-in {
+  from {
+    transform: translateY(16px);
+    opacity: 0.4;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fx-fade {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fx-bolt {
+  from {
+    opacity: 0.95;
+    transform: translateX(-30%);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(30%);
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-6px);
+  }
+  75% {
+    transform: translateX(6px);
+  }
+}
+
+@keyframes crystal-flash {
+  0% {
+    box-shadow: 0 0 8px #fff8;
+  }
+  50% {
+    box-shadow: 0 0 28px #7ef0d8;
+  }
+  100% {
+    box-shadow: 0 0 12px #7ef0d888;
+  }
 }
 
 @media (min-width: 861px) {

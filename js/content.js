@@ -65,12 +65,12 @@ const SKILL_LABEL = {
 };
 
 const SKILL_HELP = {
-  eye: "Read the next stone in the woods’ song.",
+  eye: "Read the next true gift, moss-step, note, or sigil.",
   shield: "The next mistake will not cut the party.",
-  grace: "Set the highest ring true.",
-  spark: "Nudge one cavern ring toward the constellation.",
+  grace: "Spot the safe neighboring moss.",
+  spark: "Guess what the hat actually meant.",
   step: "Hear the cavern’s next crystal note.",
-  stone: "Uni points her horn at the first true stone.",
+  stone: "Uni flashes from the glade.",
 };
 
 const PORTRAIT = {
