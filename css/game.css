@@ -332,13 +332,15 @@ body {
   padding: 12px 24px 8px;
 }
 
-#app:has(#title-screen:not([hidden])) .stage {
+#app:has(#title-screen:not([hidden])) .stage,
+#app:has(#game-over-screen:not([hidden])) .stage {
   align-items: flex-start;
   padding-top: 5vh;
   min-height: auto;
 }
 
 .title-screen,
+.game-over-screen,
 .select-copy {
   text-align: center;
   max-width: 780px;
@@ -355,10 +357,40 @@ body {
   margin: 0 auto 4px;
 }
 
-.title-screen {
+.title-screen,
+.game-over-screen {
   background: linear-gradient(180deg, rgba(10, 6, 12, 0.35), transparent);
   border-radius: 18px;
   padding: 12px 18px 20px;
+}
+
+.game-over-screen {
+  background: linear-gradient(180deg, rgba(40, 4, 10, 0.55), rgba(10, 6, 12, 0.2));
+}
+
+.go-vitals {
+  width: min(280px, 80%);
+  margin: 0 auto 22px;
+  text-align: left;
+}
+
+.go-vitals span {
+  display: block;
+  font-family: Cinzel, serif;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+
+#app.game-over-active .scene-citadel .vignette {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 28%,
+    rgba(60, 0, 8, 0.55) 70%,
+    rgba(8, 0, 4, 0.88) 100%
+  );
 }
 
 .kicker {
@@ -579,13 +611,14 @@ h2 {
 
 .puzzle-mount {
   margin-top: 8px;
+  text-align: center;
 }
 
-.rune-row,
-.crystal-row {
+.rune-row {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .rune,
@@ -622,6 +655,11 @@ h2 {
 .status {
   color: #f0d48a;
   font-style: italic;
+  font-size: 26px;
+  line-height: 1.4;
+  text-align: center;
+  margin: 6px auto 14px;
+  max-width: 36em;
 }
 
 .fx-layer {
@@ -690,11 +728,13 @@ h2 {
 
 .gift-row,
 .hat-row,
-.sigil-row {
+.sigil-row,
+.crystal-row {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 8px;
+  justify-content: center;
 }
 
 .gift-card,
@@ -752,7 +792,7 @@ h2 {
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
   max-width: 360px;
-  margin-top: 8px;
+  margin: 8px auto 0;
 }
 
 .path-cell {
@@ -917,6 +957,8 @@ h2 {
 
   .hud {
     grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 10px 14px 6px;
   }
 
   .hud-vitals {
@@ -930,5 +972,68 @@ h2 {
 
   h1 {
     font-size: 42px;
+  }
+
+  /* Collapse empty stage space so dialogue + riddles sit in the first viewport */
+  .stage {
+    min-height: 0;
+    max-height: none;
+    padding: 4px 12px 0;
+  }
+
+  #app:has(#dialogue:not([hidden])) .stage {
+    min-height: 0;
+    height: 0;
+    overflow: hidden;
+    padding: 0;
+  }
+
+  .dialogue {
+    padding: 0 12px 14px;
+  }
+
+  .dialogue-inner {
+    padding: 12px 14px 12px;
+  }
+
+  .dialogue-text {
+    font-size: 18px;
+    min-height: 0;
+    margin: 8px 0 10px;
+  }
+
+  #app:has(#puzzle-mount:not(:empty)) .dialogue-text {
+    font-size: 16px;
+    line-height: 1.35;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+
+  .status {
+    font-size: 24px;
+    line-height: 1.35;
+    margin: 4px auto 12px;
+  }
+
+  .gift-card,
+  .hat-item,
+  .sigil {
+    min-width: min(140px, 42vw);
+    min-height: 56px;
+  }
+
+  .path-grid {
+    max-width: 300px;
+  }
+
+  .music-dock {
+    right: 10px;
+    bottom: 10px;
+  }
+
+  .music-credit {
+    font-size: 10px;
+    max-width: 42vw;
+    white-space: normal;
   }
 }

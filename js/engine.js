@@ -1,4 +1,5 @@
 const MAX_HP = 8;
+const SAVE_KEY = "dq80s-save-v1";
 const GIFT_ROUNDS = [
   { clue: "It drinks the dark so a sister may walk unseen.", answer: "cloak" },
   { clue: "It fires light, not arrows of wood.", answer: "bow" },
@@ -11,6 +12,7 @@ const SIMON_SONG = [0, 2, 1, 3, 2];
 const SIGIL_SONG = ["horn", "night", "compass"];
 
 const state = {
+  beat: "title",
   leaderId: null,
   hp: MAX_HP,
   skillUsed: false,
@@ -25,6 +27,55 @@ const state = {
 };
 
 const $ = (id) => document.getElementById(id);
+
+function persist() {
+  if (state.beat === "title") {
+    clearSave();
+    return;
+  }
+  const data = {
+    beat: state.beat,
+    leaderId: state.leaderId,
+    hp: state.hp,
+    skillUsed: state.skillUsed,
+    shieldArmed: state.shieldArmed,
+    giftRound: state.giftRound,
+    pathCell: state.pathCell,
+    pathTrail: state.pathTrail,
+    simonHeard: state.simonHeard,
+    sigils: state.sigils,
+  };
+  try {
+    sessionStorage.setItem(SAVE_KEY, JSON.stringify(data));
+  } catch (_) {
+    /* ignore quota / private mode */
+  }
+}
+
+function clearSave() {
+  try {
+    sessionStorage.removeItem(SAVE_KEY);
+  } catch (_) {
+    /* ignore */
+  }
+}
+
+function readSave() {
+  try {
+    const raw = sessionStorage.getItem(SAVE_KEY);
+    if (!raw) return null;
+    const data = JSON.parse(raw);
+    if (!data || typeof data.beat !== "string") return null;
+    return data;
+  } catch (_) {
+    return null;
+  }
+}
+
+function setBeat(beat) {
+  state.beat = beat;
+  persist();
+}
 
 function leader() {
   return HEROES.find((h) => h.id === state.leaderId);
@@ -54,11 +105,13 @@ function setHp() {
 function hurt(n = 1) {
   if (state.shieldArmed) {
     state.shieldArmed = false;
+    persist();
     flashFx("shield");
     return " Eric’s wall drinks the blow. The party does not stagger.";
   }
   state.hp = Math.max(0, state.hp - n);
   setHp();
+  persist();
   $("hp-fill").classList.add("hp-hurt");
   document.getElementById("app").classList.add("screen-shake");
   setTimeout(() => {
@@ -66,7 +119,29 @@ function hurt(n = 1) {
     document.getElementById("app").classList.remove("screen-shake");
   }, 420);
   flashFx("hurt");
+  if (state.hp <= 0) {
+    setTimeout(showGameOver, 450);
+    return null;
+  }
   return "";
+}
+
+function showGameOver() {
+  state.beat = "gameover";
+  state.puzzle = null;
+  state.hp = 0;
+  persist();
+  setScene("citadel");
+  const app = document.getElementById("app");
+  app.classList.add("game-over-active");
+  app.classList.remove("screen-shake");
+  $("title-screen").hidden = true;
+  $("select-screen").hidden = true;
+  $("dialogue").hidden = true;
+  $("hud").hidden = true;
+  $("portrait-stage").hidden = true;
+  $("game-over-screen").hidden = false;
+  $("go-hp-fill").style.width = "0%";
 }
 
 function renderParty() {
@@ -138,6 +213,9 @@ function showDialogue({ speaker, role, text, choices = [], puzzle = null, scene,
 }
 
 function startSelect() {
+  setBeat("select");
+  document.getElementById("app").classList.remove("game-over-active");
+  $("game-over-screen").hidden = true;
   setScene("meadow");
   $("title-screen").hidden = true;
   $("select-screen").hidden = false;
@@ -169,6 +247,7 @@ function startSelect() {
 }
 
 function intro() {
+  setBeat("intro");
   const L = leader();
   flashFx("magic");
   showDialogue({
@@ -185,31 +264,36 @@ function intro() {
 }
 
 function woodsAsk() {
+  setBeat("woodsAsk");
   showDialogue({
     speaker: "Dungeon Master",
     role: "Guide of the Realm",
     text: "Home is a door with many locks, young ones. First you must remember the gifts I placed in your hands — not as toys, as names you keep for one another.\n\nFail, and the woods will sip your courage. Succeed, and the trees will open a path Uni already knows.",
-    choices: [{ label: "We remember", onClick: giftPuzzle }],
+    choices: [{ label: "We remember", onClick: () => giftPuzzle() }],
   });
 }
 
 function woodsGifts() {
+  setBeat("woodsGifts");
   const L = leader();
   showDialogue({
     speaker: L.name,
     role: `${L.cls} · Leader`,
     text: `${L.line}\n\nHank’s bow hums gold. Eric’s shield sulks and shines. Diana’s staff lengthens when she isn’t looking. Presto’s hat fidgets. Sheila’s cloak drinks a patch of dusk. Bobby’s club is already too big for his hands — Uni approves.`,
-    choices: [{ label: "The Dungeon Master tests us", onClick: giftPuzzle }],
+    choices: [{ label: "The Dungeon Master tests us", onClick: () => giftPuzzle() }],
   });
 }
 
-function giftPuzzle() {
-  state.giftRound = 0;
+function giftPuzzle({ resume = false } = {}) {
+  if (!resume) state.giftRound = 0;
+  setBeat("giftPuzzle");
   showDialogue({
     scene: "woods",
     speaker: "Dungeon Master",
     role: "A riddle in gifts",
-    text: "Three truths. Touch the gift that answers each. The Circle of Six is not six strangers — it is six promises.",
+    text: resume
+      ? GIFT_ROUNDS[state.giftRound].clue
+      : "Three truths. Touch the gift that answers each. The Circle of Six is not six strangers — it is six promises.",
     puzzle: renderGifts,
   });
 }
@@ -240,6 +324,7 @@ function renderGifts() {
         btn.classList.add("correct");
         flashFx("magic");
         state.giftRound += 1;
+        persist();
         if (state.giftRound >= GIFT_ROUNDS.length) woodsClear();
         else {
           state.skillUsed = false;
@@ -249,6 +334,7 @@ function renderGifts() {
       } else {
         btn.classList.add("wrong");
         const extra = hurt(1);
+        if (extra === null) return;
         showDialogue({
           speaker: "Dungeon Master",
           role: "Gently correcting",
@@ -274,6 +360,7 @@ function renderGifts() {
 
 function woodsClear() {
   state.puzzle = null;
+  setBeat("woodsClear");
   syncSkillChip();
   showDialogue({
     scene: "woods",
@@ -281,13 +368,16 @@ function woodsClear() {
     speaker: "Bobby",
     role: "Barbarian",
     text: "Uni’s gone! She bolted between the oaks — I hear orcs. I hear her too. We have to follow her tracks and not theirs.",
-    choices: [{ label: "Follow Uni", onClick: uniPuzzle }],
+    choices: [{ label: "Follow Uni", onClick: () => uniPuzzle() }],
   });
 }
 
-function uniPuzzle() {
-  state.pathCell = PATH_START;
-  state.pathTrail = [PATH_START];
+function uniPuzzle({ resume = false } = {}) {
+  if (!resume) {
+    state.pathCell = PATH_START;
+    state.pathTrail = [PATH_START];
+  }
+  setBeat("uniPuzzle");
   showDialogue({
     scene: "woods",
     speaker: "Uni",
@@ -342,16 +432,18 @@ function renderPath() {
       }
       if (PATH_ORCS.has(i)) {
         const extra = hurt(1);
+        if (extra === null) return;
         showDialogue({
           speaker: "Eric",
           role: "Cavalier",
           text: `Orcs. Of course there are orcs.${extra} Uni stamps, unimpressed. Back to the last safe moss.`,
-          choices: [{ label: "Reset the trail", onClick: uniPuzzle }],
+          choices: [{ label: "Reset the trail", onClick: () => uniPuzzle() }],
         });
         return;
       }
       state.pathCell = i;
       state.pathTrail.push(i);
+      persist();
       flashFx(i === PATH_UNI ? "magic" : "step");
       if (i === PATH_UNI) cavernOpen();
       else renderPath();
@@ -361,6 +453,7 @@ function renderPath() {
 
 function cavernOpen() {
   state.puzzle = null;
+  setBeat("cavernOpen");
   syncSkillChip();
   showDialogue({
     scene: "cavern",
@@ -368,13 +461,16 @@ function cavernOpen() {
     speaker: "Dungeon Master",
     role: "Guide of the Realm",
     text: "Uni leads you to a mouth of crystal. The cavern remembers every song it has ever been sung. Answer it in kind — first listen, then play — or the floor will become a throat.",
-    choices: [{ label: "Listen to the cavern", onClick: simonPuzzle }],
+    choices: [{ label: "Listen to the cavern", onClick: () => simonPuzzle() }],
   });
 }
 
-function simonPuzzle() {
-  state.simonHeard = [];
-  state.simonLocked = true;
+function simonPuzzle({ resume = false } = {}) {
+  if (!resume) {
+    state.simonHeard = [];
+    state.simonLocked = true;
+  }
+  setBeat("simonPuzzle");
   showDialogue({
     scene: "cavern",
     speaker: "Presto",
@@ -439,14 +535,16 @@ function tapSimon(i) {
   const n = state.simonHeard.length;
   if (state.simonHeard[n - 1] !== SIMON_SONG[n - 1]) {
     const extra = hurt(1);
+    if (extra === null) return;
     showDialogue({
       speaker: "Eric",
       role: "Cavalier",
       text: `Wrong chord. The cave spat frost.${extra} Again — and nobody “improvise,” Presto.`,
-      choices: [{ label: "Hear it once more", onClick: simonPuzzle }],
+      choices: [{ label: "Hear it once more", onClick: () => simonPuzzle() }],
     });
     return;
   }
+  persist();
   if (n === SIMON_SONG.length) {
     flashFx("magic");
     hatDoor();
@@ -455,17 +553,19 @@ function tapSimon(i) {
 
 function hatDoor() {
   state.puzzle = null;
+  setBeat("hatDoor");
   syncSkillChip();
   showDialogue({
     scene: "cavern",
     speaker: "Sheila",
     role: "Thief",
     text: "The ice-glass sighs — then sticks. Presto asked the hat for a key. The hat, being the hat, produced four objects and a look of injured pride.",
-    choices: [{ label: "See what the hat coughed up", onClick: hatPuzzle }],
+    choices: [{ label: "See what the hat coughed up", onClick: () => hatPuzzle() }],
   });
 }
 
 function hatPuzzle() {
+  setBeat("hatPuzzle");
   showDialogue({
     scene: "cavern",
     speaker: "Presto",
@@ -501,6 +601,7 @@ function renderHat() {
       } else {
         btn.classList.add("wrong");
         const extra = hurt(1);
+        if (extra === null) return;
         const jokes = {
           chicken: "The chicken squeaks. The ice is unmoved, and slightly offended.",
           key: "The key is for a diary. Presto turns crimson.",
@@ -510,7 +611,7 @@ function renderHat() {
           speaker: "Presto",
           role: "Magician",
           text: `${jokes[btn.dataset.id]}${extra}`,
-          choices: [{ label: "Ask the hat again", onClick: hatPuzzle }],
+          choices: [{ label: "Ask the hat again", onClick: () => hatPuzzle() }],
         });
       }
     });
@@ -519,6 +620,7 @@ function renderHat() {
 
 function citadelRoad() {
   state.puzzle = null;
+  setBeat("citadelRoad");
   syncSkillChip();
   showDialogue({
     scene: "citadel",
@@ -531,19 +633,23 @@ function citadelRoad() {
 }
 
 function vengerMeet() {
+  setBeat("vengerMeet");
   flashFx("venger");
   showDialogue({
     scene: "citadel",
     speaker: "Venger",
     role: "Force of Evil",
     text: "Children. Still playing at heroes. I am Venger. Your Compass of Seeking sits in my sigils now. Repeat my night-script — or wander until Tiamat hungers.",
-    choices: [{ label: "Watch the sigils", onClick: sigilPuzzle }],
+    choices: [{ label: "Watch the sigils", onClick: () => sigilPuzzle() }],
   });
 }
 
-function sigilPuzzle() {
-  state.sigils = [];
-  state.simonLocked = true;
+function sigilPuzzle({ resume = false } = {}) {
+  if (!resume) {
+    state.sigils = [];
+    state.simonLocked = true;
+  }
+  setBeat("sigilPuzzle");
   showDialogue({
     scene: "citadel",
     speaker: "Venger",
@@ -607,14 +713,16 @@ function tapSigil(id) {
   const n = state.sigils.length;
   if (state.sigils[n - 1] !== SIGIL_SONG[n - 1]) {
     const extra = hurt(1);
+    if (extra === null) return;
     showDialogue({
       speaker: "Venger",
       role: "Force of Evil",
       text: `Wrong scripture.${extra} The dark is a patient teacher.`,
-      choices: [{ label: "Watch again", onClick: sigilPuzzle }],
+      choices: [{ label: "Watch again", onClick: () => sigilPuzzle() }],
     });
     return;
   }
+  persist();
   if (n === SIGIL_SONG.length) {
     flashFx("arrow");
     vengerFight();
@@ -622,6 +730,7 @@ function tapSigil(id) {
 }
 
 function vengerFight() {
+  setBeat("vengerFight");
   const L = leader();
   showDialogue({
     scene: "citadel",
@@ -653,7 +762,10 @@ function resolveMove(h) {
   if (h.id === "eric") success = true;
   if (h.id === "bobby") success = lead || Math.random() > 0.4;
   let extra = "";
-  if (!success) extra = hurt(1);
+  if (!success) {
+    extra = hurt(1);
+    if (extra === null) return;
+  }
   if (h.id === "hank") flashFx("arrow");
   else if (h.id === "eric") flashFx("shield");
   else flashFx("magic");
@@ -684,20 +796,18 @@ function resolveMove(h) {
 }
 
 function finale() {
-  const alive = state.hp > 0;
+  setBeat("finale");
   showDialogue({
     scene: "citadel",
     speaker: "Venger",
     role: "Force of Evil",
-    text: alive
-      ? "Enough. Keep your scratches and your friendship. I take the Compass. When Tiamat hungers, I will not need children to amuse me."
-      : "You fall. The Realm, sentimental beast, will not let you end. Wake. Hurt. Continue.",
+    text: "Enough. Keep your scratches and your friendship. I take the Compass. When Tiamat hungers, I will not need children to amuse me.",
     choices: [{ label: "The Dungeon Master speaks", onClick: epilogue }],
   });
 }
 
 function epilogue() {
-  if (state.hp <= 0) state.hp = 1;
+  setBeat("epilogue");
   setHp();
   const L = leader();
   flashFx("magic");
@@ -717,16 +827,81 @@ function epilogue() {
 }
 
 function resetToTitle() {
+  clearSave();
+  state.beat = "title";
   state.hp = MAX_HP;
   state.leaderId = null;
   state.skillUsed = false;
   state.shieldArmed = false;
   state.puzzle = null;
+  state.giftRound = 0;
+  state.pathCell = PATH_START;
+  state.pathTrail = [PATH_START];
+  state.simonHeard = [];
+  state.sigils = [];
+  document.getElementById("app").classList.remove("game-over-active");
   setScene("title");
   $("dialogue").hidden = true;
   $("hud").hidden = true;
   $("portrait-stage").hidden = true;
+  $("game-over-screen").hidden = true;
+  $("select-screen").hidden = true;
   $("title-screen").hidden = false;
+}
+
+function applySave(data) {
+  state.beat = data.beat;
+  state.leaderId = data.leaderId ?? null;
+  state.hp = typeof data.hp === "number" ? data.hp : MAX_HP;
+  state.skillUsed = !!data.skillUsed;
+  state.shieldArmed = !!data.shieldArmed;
+  state.giftRound = typeof data.giftRound === "number" ? data.giftRound : 0;
+  state.pathCell = typeof data.pathCell === "number" ? data.pathCell : PATH_START;
+  state.pathTrail = Array.isArray(data.pathTrail) ? data.pathTrail : [PATH_START];
+  state.simonHeard = Array.isArray(data.simonHeard) ? data.simonHeard : [];
+  state.sigils = Array.isArray(data.sigils) ? data.sigils : [];
+}
+
+function resumeFromSave(data) {
+  applySave(data);
+  if (data.beat === "gameover") {
+    showGameOver();
+    return;
+  }
+  if (data.beat === "select") {
+    startSelect();
+    return;
+  }
+  if (!state.leaderId || !HEROES.some((h) => h.id === state.leaderId)) {
+    clearSave();
+    return;
+  }
+  renderParty();
+  setHp();
+  const beats = {
+    intro,
+    woodsAsk,
+    woodsGifts,
+    giftPuzzle: () => giftPuzzle({ resume: true }),
+    woodsClear,
+    uniPuzzle: () => uniPuzzle({ resume: true }),
+    cavernOpen,
+    simonPuzzle: () => simonPuzzle(),
+    hatDoor,
+    hatPuzzle,
+    citadelRoad,
+    vengerMeet,
+    sigilPuzzle: () => sigilPuzzle(),
+    vengerFight,
+    finale,
+    epilogue,
+  };
+  const go = beats[data.beat];
+  if (go) go();
+  else {
+    clearSave();
+    resetToTitle();
+  }
 }
 
 function useLeaderSkill() {
@@ -815,6 +990,7 @@ function useLeaderSkill() {
     return;
   }
   syncSkillChip();
+  persist();
 }
 
 const bgm = $("bgm");
@@ -857,6 +1033,7 @@ $("btn-begin").addEventListener("click", () => {
   startBgm();
   startSelect();
 });
+$("btn-rise").addEventListener("click", resetToTitle);
 $("skill-chip").addEventListener("click", useLeaderSkill);
 setScene("title");
 syncMusicButton();
@@ -868,6 +1045,7 @@ document.addEventListener("visibilitychange", () => {
 window.addEventListener("pagehide", stopBgm);
 
 const boot = new URLSearchParams(location.search);
+const saved = readSave();
 if (boot.get("screen") === "select") {
   startSelect();
 } else if (boot.get("screen") === "play") {
@@ -875,4 +1053,6 @@ if (boot.get("screen") === "select") {
   renderParty();
   setHp();
   intro();
+} else if (saved && saved.beat && saved.beat !== "title") {
+  resumeFromSave(saved);
 }

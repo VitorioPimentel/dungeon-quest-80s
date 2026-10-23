@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@500;700&family=IM+Fell+English:ital@0;1&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/game.css?v=quest2" />
+    <link rel="stylesheet" href="css/game.css?v=quest5" />
   </head>
   <body>
     <div id="app">
@@ -53,6 +53,23 @@
             and Venger’s night-script. The Circle of Six still walks as one.
           </p>
           <button type="button" class="btn gold" id="btn-begin">Begin the Quest</button>
+        </section>
+
+        <section class="game-over-screen" id="game-over-screen" hidden>
+          <p class="kicker">The Circle falters</p>
+          <h1>Game Over</h1>
+          <p class="subtitle">Party Heart spent</p>
+          <div class="go-vitals">
+            <span>Party Heart</span>
+            <div class="hp-track" aria-label="Party health empty">
+              <div class="hp-fill" id="go-hp-fill" style="width: 0%"></div>
+            </div>
+          </div>
+          <p class="lede">
+            The Realm still turns, but your party’s heart has gone dark.
+            Venger’s night does not wait.
+          </p>
+          <button type="button" class="btn gold" id="btn-rise">Rise again</button>
         </section>
 
         <section class="select-screen" id="select-screen" hidden>
