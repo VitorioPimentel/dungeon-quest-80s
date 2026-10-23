@@ -65,12 +65,12 @@ const SKILL_LABEL = {
 };
 
 const SKILL_HELP = {
-  eye: "Read the next true gift, moss-step, note, or sigil.",
+  eye: "Read the next true gift, step, note, lock, or mark.",
   shield: "The next mistake will not cut the party.",
-  grace: "Spot the safe neighboring moss.",
-  spark: "Guess what the hat actually meant.",
-  step: "Hear the cavern’s next crystal note.",
-  stone: "Uni flashes from the glade.",
+  grace: "Spot safe neighbors or the right post.",
+  spark: "Guess what the hat meant — or the true name.",
+  step: "Hear the next crystal note or lock.",
+  stone: "Uni flashes from the goal — or the next command.",
 };
 
 const PORTRAIT = {
